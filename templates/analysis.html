@@ -1,0 +1,124 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Resultado del Análisis</h5>
+        <form action="/clear_analysis" method="post">
+            <button type="submit" class="btn btn-danger">Limpiar Historial de Análisis</button>
+        </form>
+        <div id="chart"></div>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script>
+            var trace1 = {
+                x: {{ chart_data['timestamp']|default([])|tojson }},
+                open: {{ chart_data['open']|default([])|tojson }},
+                high: {{ chart_data['high']|default([])|tojson }},
+                low: {{ chart_data['low']|default([])|tojson }},
+                close: {{ chart_data['close']|default([])|tojson }},
+                type: 'candlestick',
+                name: 'Precio',
+                xaxis: 'x',
+                yaxis: 'y'
+            };
+
+            var trace2 = {
+                x: {{ chart_data['timestamp']|default([])|tojson }},
+                y: {{ chart_data['volume']|default([])|tojson }},
+                type: 'bar',
+                name: 'Volumen',
+                xaxis: 'x',
+                yaxis: 'y2',
+                marker: { color: 'rgba(100, 149, 237, 0.5)' }
+            };
+
+            var layout = {
+                title: 'Análisis Técnico',
+                xaxis: {
+                    title: 'Fecha',
+                    type: 'date'
+                },
+                yaxis: {
+                    title: 'Precio',
+                    domain: [0.3, 1]
+                },
+                yaxis2: {
+                    title: 'Volumen',
+                    domain: [0, 0.2],
+                    overlaying: 'y',
+                    anchor: 'x'
+                },
+                grid: { rows: 2, columns: 1, pattern: 'independent' }
+            };
+
+            var data = [trace1, trace2];
+
+            Plotly.newPlot('chart', data, layout);
+        </script>
+        <table class="table table-striped table-dark">
+            <thead>
+                <tr>
+                    <th>Pareja</th>
+                    {% if result and result[0] %}
+                        {% for column in result[0].keys() if column != 'pair' %}
+                            <th>{{ column }}</th>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for pair_data in result %}
+                    <tr>
+                        <td><a href="{{ url_for('analyze', symbol=pair_data['pair']) }}">{{ pair_data['pair'] }}</a></td>
+                        {% for column in pair_data.keys() if column != 'pair' %}
+                            <td>{{ pair_data[column] }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if not result %}
+            <p>No hay resultados disponibles.</p>
+        {% endif %}
+    </div>
+</div>
+<style>
+    .notification {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background-color: #444;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        z-index: 1000;
+        display: none;
+    }
+</style>
+<div id="notification" class="notification"></div>
+<script>
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        notification.innerText = message;
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 5000);
+    }
+
+    async function fetchNewOpportunities() {
+        try {
+            const response = await fetch('/get_new_opportunities');
+            const data = await response.json();
+            if (data.length > 0) {
+                const lastOpportunity = data[0];
+                showNotification(`Nueva oportunidad de compra: ${lastOpportunity.pair} a las ${lastOpportunity.timestamp}`);
+            }
+        } catch (error) {
+            console.error('Error fetching new opportunities:', error);
+        }
+    }
+
+    setInterval(fetchNewOpportunities, 1000); // Verificar nuevas oportunidades cada 1 segundo
+</script>
+{% endblock %}

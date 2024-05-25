@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Configuración</h5>
+        <form action="/configuracion" method="post">
+            <div class="form-group">
+                <label for="apiKey">Clave API:</label>
+                <input type="text" class="form-control" id="apiKey" name="api_key" value="{{ config.api_key }}">
+            </div>
+            <div class="form-group">
+                <label for="apiSecret">Secreto API:</label>
+                <input type="text" class="form-control" id="apiSecret" name="api_secret" value="{{ config.api_secret }}">
+            </div>
+            <div class="form-group">
+                <label for="telegramApiKey">Clave API de Telegram:</label>
+                <input type="text" class="form-control" id="telegramApiKey" name="telegram_api_key" value="{{ config.telegram_api_key }}">
+            </div>
+            <div class="form-group">
+                <label for="telegramChatId">ID del Chat de Telegram:</label>
+                <input type="text" class="form-control" id="telegramChatId" name="telegram_chat_id" value="{{ config.telegram_chat_id }}">
+            </div>
+            <div class="form-group">
+                <label for="strategySelect">Estrategia:</label>
+                <select class="form-control" id="strategySelect" name="selected_strategy">
+                    {% for strategy in config.strategies %}
+                        <option value="{{ strategy }}" {% if config.selected_strategy == strategy %}selected{% endif %}>{{ strategy }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="interval">Intervalo:</label>
+                <select class="form-control" id="interval" name="parameters[interval]">
+                    <option value="5m" {% if config.parameters.interval == "5m" %}selected{% endif %}>5 Minutos</option>
+                    <option value="15m" {% if config.parameters.interval == "15m" %}selected{% endif %}>15 Minutos</option>
+                    <option value="30m" {% if config.parameters.interval == "30m" %}selected{% endif %}>30 Minutos</option>
+                    <option value="1h" {% if config.parameters.interval == "1h" %}selected{% endif %}>1 Hora</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="startDate">Fecha de Inicio:</label>
+                <input type="date" class="form-control" id="startDate" name="parameters[start_date]" value="{{ config.parameters.start_date }}">
+            </div>
+            <div class="form-group">
+                <label for="endDate">Fecha de Fin:</label>
+                <input type="date" class="form-control" id="endDate" name="parameters[end_date]" value="{{ config.parameters.end_date }}">
+            </div>
+            <div class="form-group">
+                <label for="minDurationDays">Duración mínima (días):</label>
+                <input type="number" class="form-control" id="minDurationDays" name="filters[min_duration_days]" value="{{ config.filters.min_duration_days }}">
+            </div>
+            <div class="form-group">
+                <label for="minVolatility">Volatilidad mínima:</label>
+                <input type="number" class="form-control" id="minVolatility" name="filters[min_volatility]" value="{{ config.filters.min_volatility }}">
+            </div>
+            <div class="form-group">
+                <label for="minVolume">Volumen mínimo:</label>
+                <input type="number" class="form-control" id="minVolume" name="filters[min_volume]" value="{{ config.filters.min_volume }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Configuración</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

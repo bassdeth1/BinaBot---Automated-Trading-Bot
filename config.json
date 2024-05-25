@@ -1,0 +1,22 @@
+{
+    "api_key": "",
+    "api_secret": "",
+    "telegram_api_key": "",
+    "telegram_chat_id": "",
+    "selected_strategy": "estrategia1",
+    "strategies": [
+        "estrategia1",
+        "estrategia2",
+        "estrategia3"
+    ],
+    "parameters": {
+        "interval": "30m",
+        "start_date": "",
+        "end_date": ""
+    },
+    "filters": {
+        "min_duration_days": 60,
+        "min_volatility": 0.01,
+        "min_volume": 1000.0
+    }
+}
