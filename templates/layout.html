@@ -1,38 +1,34 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Trading</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/css/styles.css">
-    <script src="/static/js/script.js" defer></script>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand" href="/">Panel de Trading</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/configuracion">Configuración</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/analyze">Análisis</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <div class="container">
-        {% block content %}{% endblock %}
+{% extends "layout.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Resultados del Análisis</h5>
+        {% if result and result|length > 0 %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Par</th>
+                        <th>Fecha y Hora</th>
+                        {% for key in result[0].keys() if key not in ['pair', 'timestamp'] %}
+                            <th>{{ key }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for res in result %}
+                        <tr>
+                            <td>{{ res.pair }}</td>
+                            <td>{{ res.timestamp }}</td>
+                            {% for key, value in res.items() if key not in ['pair', 'timestamp'] %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No se encontraron resultados de análisis.</p>
+        {% endif %}
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+</div>
+{% endblock %}
