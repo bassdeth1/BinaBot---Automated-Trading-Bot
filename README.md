@@ -21,7 +21,7 @@ BinaBot is an automated trading bot designed to operate in the cryptocurrency ma
 ## Installation
 1. Clone the repository:
     ```sh
-    git clone https://github.com/bassdeth1/BinaBot.git
+    git clone https://github.com/bassdeth1/BinaBot---Automated-Trading-Bot
     ```
 2. Navigate to the project directory:
     ```sh
@@ -93,7 +93,7 @@ BinaBot es un bot de trading automatizado diseñado para operar en el mercado de
 ## Instalación
 1. Clona el repositorio:
     ```sh
-    git clone https://github.com/bassdeth1/BinaBot.git
+    git clone https://github.com/bassdeth1/BinaBot---Automated-Trading-Bot
     ```
 2. Navega al directorio del proyecto:
     ```sh
