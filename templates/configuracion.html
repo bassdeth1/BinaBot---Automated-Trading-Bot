@@ -45,18 +45,6 @@
                 <label for="endDate">Fecha de Fin:</label>
                 <input type="date" class="form-control" id="endDate" name="parameters[end_date]" value="{{ config.parameters.end_date }}">
             </div>
-            <div class="form-group">
-                <label for="minDurationDays">Duración mínima (días):</label>
-                <input type="number" class="form-control" id="minDurationDays" name="filters[min_duration_days]" value="{{ config.filters.min_duration_days }}">
-            </div>
-            <div class="form-group">
-                <label for="minVolatility">Volatilidad mínima:</label>
-                <input type="number" class="form-control" id="minVolatility" name="filters[min_volatility]" value="{{ config.filters.min_volatility }}">
-            </div>
-            <div class="form-group">
-                <label for="minVolume">Volumen mínimo:</label>
-                <input type="number" class="form-control" id="minVolume" name="filters[min_volume]" value="{{ config.filters.min_volume }}">
-            </div>
             <button type="submit" class="btn btn-primary">Guardar Configuración</button>
         </form>
     </div>
