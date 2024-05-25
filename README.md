@@ -1,4 +1,4 @@
-# BinaBot - Automated Trading Bot
+# BinaBot – Automated Trading Bot (under construction)
 
 ## Description
 BinaBot is an automated trading bot designed to operate in the cryptocurrency market using advanced technical strategies. This bot connects to the Binance API to obtain real-time market data and execute buy and sell orders based on technical analysis.
@@ -70,7 +70,7 @@ BinaBot is an automated trading bot designed to operate in the cryptocurrency ma
 © 2024 Agustín Arellano. All rights reserved.
 
 
-# BinaBot - Bot de Trading Automatizado
+# BinaBot - Bot de Trading Automatizado (en proceso de construcciòn)
 
 ## Descripción
 BinaBot es un bot de trading automatizado diseñado para operar en el mercado de criptomonedas utilizando estrategias técnicas avanzadas. Este bot se conecta a la API de Binance para obtener datos de mercado en tiempo real y ejecutar órdenes de compra y venta basadas en análisis técnicos.
