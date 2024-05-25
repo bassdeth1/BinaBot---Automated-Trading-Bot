@@ -2,8 +2,104 @@
 {% block content %}
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">Bienvenido al Panel de Trading</h5>
-        <p class="card-text">Esta es la página principal del panel de trading.</p>
+        <h5 class="card-title">Panel de Trading</h5>
+        <div class="row">
+            <div class="col-md-6">
+                <h6>Pares Disponibles</h6>
+                <select multiple class="form-control" id="availablePairs" size="10">
+                    {% for pair in available_pairs %}
+                        <option value="{{ pair }}">{{ pair }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6">
+                <h6>Pares Analizados</h6>
+                <select multiple class="form-control" id="analyzedPairs" size="10">
+                    {% for pair in analyzed_pairs %}
+                        <option value="{{ pair }}">{{ pair }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6 text-center">
+                <button class="btn btn-primary" onclick="addPair()">Agregar &gt;&gt;</button>
+            </div>
+            <div class="col-md-6 text-center">
+                <button class="btn btn-danger" onclick="removePair()">&lt;&lt; Eliminar</button>
+            </div>
+        </div>
+        <hr>
+        <h5>Configuración de Filtros</h5>
+        <form action="/configuracion" method="post">
+            <div class="form-group">
+                <label for="VolumePairList_number_assets">Número de Activos:</label>
+                <input type="number" class="form-control" id="VolumePairList_number_assets" name="VolumePairList_number_assets" value="{{ filter_settings.VolumePairList.number_assets }}">
+            </div>
+            <div class="form-group">
+                <label for="AgeFilter_min_days_listed">Días mínimos del par activo:</label>
+                <input type="number" class="form-control" id="AgeFilter_min_days_listed" name="AgeFilter_min_days_listed" value="{{ filter_settings.AgeFilter.min_days_listed }}">
+            </div>
+            <div class="form-group">
+                <label for="PriceFilter_low_price_ratio">Proporción Mínima de Precio:</label>
+                <input type="number" class="form-control" id="PriceFilter_low_price_ratio" name="PriceFilter_low_price_ratio" value="{{ filter_settings.PriceFilter.low_price_ratio }}">
+            </div>
+            <div class="form-group">
+                <label for="SpreadFilter_max_spread_ratio">Proporción Máxima de Spread:</label>
+                <input type="number" class="form-control" id="SpreadFilter_max_spread_ratio" name="SpreadFilter_max_spread_ratio" value="{{ filter_settings.SpreadFilter.max_spread_ratio }}">
+            </div>
+            <div class="form-group">
+                <label for="RangeStabilityFilter_lookback_days">Días de Retroceso:</label>
+                <input type="number" class="form-control" id="RangeStabilityFilter_lookback_days" name="RangeStabilityFilter_lookback_days" value="{{ filter_settings.RangeStabilityFilter.lookback_days }}">
+                <label for="RangeStabilityFilter_min_rate_of_change">Tasa Mínima de Cambio:</label>
+                <input type="number" class="form-control" id="RangeStabilityFilter_min_rate_of_change" name="RangeStabilityFilter_min_rate_of_change" value="{{ filter_settings.RangeStabilityFilter.min_rate_of_change }}">
+                <label for="RangeStabilityFilter_refresh_period">Período de Actualización:</label>
+                <input type="number" class="form-control" id="RangeStabilityFilter_refresh_period" name="RangeStabilityFilter_refresh_period" value="{{ filter_settings.RangeStabilityFilter.refresh_period }}">
+            </div>
+            <div class="form-group">
+                <label for="VolatilityFilter_lookback_days">Días retrospectivos del filtro de volatilidad:</label>
+                <input type="number" class="form-control" id="VolatilityFilter_lookback_days" name="VolatilityFilter_lookback_days" value="{{ filter_settings.VolatilityFilter.lookback_days }}">
+                <label for="VolatilityFilter_min_volatility">Filtro de volatilidad mínima:</label>
+                <input type="number" class="form-control" id="VolatilityFilter_min_volatility" name="VolatilityFilter_min_volatility" value="{{ filter_settings.VolatilityFilter.min_volatility }}">
+                <label for="VolatilityFilter_max_volatility">Filtro de volatilidad máxima:</label>
+                <input type="number" class="form-control" id="VolatilityFilter_max_volatility" name="VolatilityFilter_max_volatility" value="{{ filter_settings.VolatilityFilter.max_volatility }}">
+                <label for="VolatilityFilter_refresh_period">Período de Actualización:</label>
+                <input type="number" class="form-control" id="VolatilityFilter_refresh_period" name="VolatilityFilter_refresh_period" value="{{ filter_settings.VolatilityFilter.refresh_period }}">
+            </div>
+            <div class="form-group">
+                <label for="ShuffleFilter_seed">Filtro aleatorio:</label>
+                <input type="number" class="form-control" id="ShuffleFilter_seed" name="ShuffleFilter_seed" value="{{ filter_settings.ShuffleFilter.seed }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Configuración</button>
+        </form>
     </div>
 </div>
+
+<script>
+    async function addPair() {
+        const selected = document.getElementById('availablePairs').selectedOptions;
+        const pairs = Array.from(selected).map(option => option.value);
+        const response = await fetch('/add_pairs', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ pairs })
+        });
+        location.reload();
+    }
+
+    async function removePair() {
+        const selected = document.getElementById('analyzedPairs').selectedOptions;
+        const pairs = Array.from(selected).map(option => option.value);
+        const response = await fetch('/remove_pairs', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ pairs })
+        });
+        location.reload();
+    }
+</script>
 {% endblock %}
